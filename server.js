@@ -168,6 +168,20 @@ app.post("/outfits", async (req, res) => {
 });
 // Put route outfit
 // Delete route outfit
+app.delete("/outfits/:id", async (req, res) => {
+  try {
+    const outfitId = req.params.id;
+    const deletedOutfit = await outfit.findByIdAndDelete(outfitId);
+
+    if (deletedOutfit) {
+      return res.status(200).json({ message: "Outfit deleted successfully" });
+    } else {
+      return res.status(404).json({ message: "Outfit not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting outfit", error });
+  }
+});
 
 /////////////////////////////// LISTENING PORT /////////////////////////////////////////
 const PORT = process.env.PORT || 3000;
