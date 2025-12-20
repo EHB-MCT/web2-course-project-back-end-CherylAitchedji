@@ -77,6 +77,26 @@ app.post("/clothes", async (req, res) => {
 });
 
 // Put route clothing item
+app.put("/clothes/:id", async (req, res) => {
+  try {
+    const clothingId = req.params.id;
+    const data = req.body;
+    const updatedClothing = await clothes.findByIdAndUpdate(clothingId, data, {
+      new: true,
+    });
+
+    if (updatedClothing) {
+      return res.status(200).json({
+        message: "Clothing item updated successfully",
+        data: updatedClothing,
+      });
+    } else {
+      return res.status(404).json({ message: "Clothing item not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: "Invalid input" });
+  }
+});
 // Delete route clothing item
 
 ///////////////////////////////////////////////////////////////////////
