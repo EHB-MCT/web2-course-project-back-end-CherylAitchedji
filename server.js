@@ -166,7 +166,30 @@ app.post("/outfits", async (req, res) => {
     res.status(400).json({ message: "Invalid input", error });
   }
 });
+
 // Put route outfit
+app.put("/outfits/:id", async (req, res) => {
+  try {
+    const outfitId = req.params.id;
+    const updateData = req.body;
+    const updatedOutfit = await outfit.findByIdAndUpdate(outfitId, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (updatedOutfit) {
+      return res.status(200).json({
+        message: "Outfit updated successfully",
+        data: updatedOutfit,
+      });
+    } else {
+      return res.status(404).json({ message: "Outfit not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ message: "Invalid input", error });
+  }
+});
+
 // Delete route outfit
 app.delete("/outfits/:id", async (req, res) => {
   try {
