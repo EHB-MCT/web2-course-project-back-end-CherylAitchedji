@@ -16,7 +16,7 @@ mongoose
   });
 
 /////////////////////////////// API ROUTES /////////////////////////////////////////
-// CLOTHES
+//////////////CLOTHES
 const clothesSchema = new mongoose.Schema({
   name: String,
   clothingType: String,
@@ -97,14 +97,36 @@ app.put("/clothes/:id", async (req, res) => {
     res.status(400).json({ message: "Invalid input" });
   }
 });
-// Delete route clothing item
 
+// Delete route clothing item
+app.delete("/clothes/:id", async (req, res) => {
+  try {
+    const clothingId = req.params.id;
+    const deletedClothing = await clothes.findByIdAndDelete(clothingId);
+
+    if (deletedClothing) {
+      res.status(200).json({ message: "Clothing item deleted successfully" });
+    } else {
+      return res.status(404).json({ message: "Clothing item not found" });
+    }
+  } catch (error) {
+    console.error("Error deleting clothing item:", error);
+    res.status(500).json({ message: "Error deleting clothing item", error });
+  }
+});
 ///////////////////////////////////////////////////////////////////////
+//////////////OUTFITS
+// Get route outfits
+// Get route outfit
+// Post route outfit
+// Put route outfit
+// Delete route outfit
 
 app.post("/outfits", (req, res) => {
   res.send("Get testyyy");
 });
 
+/////////////////////////////// LISTENING PORT /////////////////////////////////////////
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`The server is running in port: ${PORT}`);
