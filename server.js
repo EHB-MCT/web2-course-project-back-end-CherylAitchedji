@@ -116,15 +116,58 @@ app.delete("/clothes/:id", async (req, res) => {
 });
 ///////////////////////////////////////////////////////////////////////
 //////////////OUTFITS
+const outfitSchema = new mongoose.Schema({
+  name: String,
+  season: String,
+  occasion: String,
+  mainColor: String,
+  liked: Boolean,
+  rating: Number,
+  image: String,
+  description: String,
+  clothes: [{ type: mongoose.Schema.Types.ObjectId, ref: "clothes" }], // Array of clothing item IDs
+});
+const outfit = mongoose.model("outfits", outfitSchema);
+
 // Get route outfits
+app.get("/outfits", async (req, res) => {
+  try {
+    const outfits = await outfit.find().populate("clothes");
+    res.status(200).json(outfits);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching outfits", error });
+  }
+});
+
 // Get route outfit
+app.get("/outfits/:id", async (req, res) => {
+  try {
+    const outfitItem = await outfit.findById(req.params.id).populate("clothes");
+    if (outfitItem) {
+      return res.status(200).json(outfitItem);
+    } else {
+      return res.status(404).json({ message: "Outfit not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching outfit", error });
+  }
+});
+
 // Post route outfit
+app.post("/outfits", async (req, res) => {
+  try {
+    const newOutfit = new outfit(req.body); // create a new outfit with posted data
+    const savedOutfit = await newOutfit.save(); // save to DB
+    res.status(201).json({
+      message: "Outfit added successfully",
+      data: savedOutfit,
+    });
+  } catch (error) {
+    res.status(400).json({ message: "Invalid input", error });
+  }
+});
 // Put route outfit
 // Delete route outfit
-
-app.post("/outfits", (req, res) => {
-  res.send("Get testyyy");
-});
 
 /////////////////////////////// LISTENING PORT /////////////////////////////////////////
 const PORT = process.env.PORT || 3000;
