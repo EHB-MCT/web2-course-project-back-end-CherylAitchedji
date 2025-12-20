@@ -32,6 +32,7 @@ const clothesSchema = new mongoose.Schema({
 const clothes = mongoose.model("clothes", clothesSchema);
 module.exports = clothes;
 
+// Get route clothes
 app.get("/clothes", async (req, res) => {
   try {
     const allClothes = await clothes.find();
@@ -44,6 +45,23 @@ app.get("/clothes", async (req, res) => {
   }
 });
 
+// Get route clothing item
+app.get("/clothes/:id", async (req, res) => {
+  try {
+    const clothingId = req.params.id;
+    const clothingItem = await clothes.findById(clothingId);
+
+    if (clothingItem) {
+      return res.status(200).json(clothingItem);
+    } else {
+      return res.status(404).json({ message: "Clothing item not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching clothing item", error });
+  }
+});
+
+// Post route clothing item
 app.post("/clothes", async (req, res) => {
   try {
     const newClothing = new clothes(req.body);
@@ -57,6 +75,11 @@ app.post("/clothes", async (req, res) => {
     res.status(400).json({ message: "Error saving clothing item", error });
   }
 });
+
+// Put route clothing item
+// Delete route clothing item
+
+///////////////////////////////////////////////////////////////////////
 
 app.post("/outfits", (req, res) => {
   res.send("Get testyyy");
