@@ -36,7 +36,7 @@ app.get("/clothes", async (req, res) => {
   try {
     const allClothes = await clothes.find();
     res.status(200).json({
-      message: "No clothing items found",
+      message: "Clothing items found",
       data: allClothes,
     });
   } catch (error) {
