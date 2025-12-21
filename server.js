@@ -2,8 +2,10 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 require("dotenv").config();
+const cors = require("cors");
 
 app.use(express.json());
+app.use(cors({ origin: "http://127.0.0.1:5500" }));
 
 // Connection with MongoDb
 mongoose
@@ -142,7 +144,10 @@ app.get("/outfits", async (req, res) => {
 // Get route outfit
 app.get("/outfits/:id", async (req, res) => {
   try {
-    const outfitItem = await outfit.findById(req.params.id).populate("clothes");
+    const outfitItem = await outfit
+      .find()
+      .sort({ _id: -1 })
+      .populate("clothes");
     if (outfitItem) {
       return res.status(200).json(outfitItem);
     } else {
