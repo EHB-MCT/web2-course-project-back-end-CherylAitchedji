@@ -5,7 +5,7 @@ require("dotenv").config();
 const cors = require("cors");
 
 app.use(express.json());
-app.use(cors({ origin: "http://127.0.0.1:5500" }));
+app.use(cors({ origin: "http://localhost:5173" }));
 
 // Connection with MongoDb
 mongoose
