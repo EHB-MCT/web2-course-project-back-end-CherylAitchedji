@@ -133,8 +133,24 @@ const outfit = mongoose.model("outfits", outfitSchema);
 
 // Get route outfits
 app.get("/outfits", async (req, res) => {
+  //console.log("Received /outfits request with query:", req.query);
   try {
-    const outfits = await outfit.find().populate("clothes");
+    console.log("Query params received:", req.query);
+    const query = {};
+
+    if (req.query.season) {
+      query.season = req.query.season;
+    }
+
+    if (req.query.occasion) {
+      query.occasion = req.query.occasion;
+    }
+
+    if (req.query.mainColor) {
+      query.mainColor = req.query.mainColor;
+    }
+    console.log("Mongo query object:", query);
+    const outfits = await outfit.find(query).populate("clothes");
     res.status(200).json(outfits);
   } catch (error) {
     res.status(500).json({ message: "Error fetching outfits", error });
