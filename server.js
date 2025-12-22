@@ -149,6 +149,17 @@ app.get("/outfits", async (req, res) => {
     if (req.query.mainColor) {
       query.mainColor = req.query.mainColor;
     }
+
+    if (req.query.liked === "true") {
+      query.liked = true;
+    }
+    if (req.query.sort === "highest-rated") {
+      outfitsQuery = outfitsQuery.sort({ rating: -1 });
+    }
+    if (req.query.sort === "newest") {
+      outfitsQuery = outfitsQuery.sort({ _id: -1 });
+    }
+
     console.log("Mongo query object:", query);
     const outfits = await outfit
       .find(query)
