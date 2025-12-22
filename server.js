@@ -106,12 +106,9 @@ app.put("/clothes/:id", async (req, res) => {
     });
 
     if (updatedClothing) {
-      return res.status(200).json({
-        message: "Clothing item updated successfully",
-        data: updatedClothing,
-      });
+      res.status(200).json(updatedClothing);
     } else {
-      return res.status(404).json({ message: "Clothing item not found" });
+      return res.status(404).json({ message: "Clothing not found" });
     }
   } catch (error) {
     res.status(400).json({ message: "Invalid input" });
