@@ -131,11 +131,8 @@ const outfitSchema = new mongoose.Schema({
 });
 const outfit = mongoose.model("outfits", outfitSchema);
 
-// Get route outfits
 app.get("/outfits", async (req, res) => {
-  //console.log("Received /outfits request with query:", req.query);
   try {
-    console.log("Query params received:", req.query);
     const query = {};
 
     if (req.query.season) {
@@ -153,18 +150,20 @@ app.get("/outfits", async (req, res) => {
     if (req.query.liked === "true") {
       query.liked = true;
     }
+
+    let outfitsQuery = outfit.find(query).populate("clothes");
+
     if (req.query.sort === "highest-rated") {
-      outfitsQuery = outfitsQuery.sort({ rating: -1 });
-    }
-    if (req.query.sort === "newest") {
+      outfitsQuery = outfitsQuery.sort({ rating: -1 }); // descending rating
+    } else if (req.query.sort === "newest") {
+      outfitsQuery = outfitsQuery.sort({ _id: -1 }); // newest first by _id
+    } else {
       outfitsQuery = outfitsQuery.sort({ _id: -1 });
     }
 
-    console.log("Mongo query object:", query);
-    const outfits = await outfit
-      .find(query)
-      .sort({ _id: -1 })
-      .populate("clothes");
+    // Execute the query:
+    const outfits = await outfitsQuery;
+
     res.status(200).json(outfits);
   } catch (error) {
     res.status(500).json({ message: "Error fetching outfits", error });
