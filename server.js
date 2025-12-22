@@ -58,14 +58,14 @@ app.get("/clothes", async (req, res) => {
       query.liked = true;
     }
 
-    let outfitsQuery = outfit.find(query).populate("clothes");
+    let clothesQuery = clothing.find(query);
 
     if (req.query.sort === "highest-rated") {
-      outfitsQuery = outfitsQuery.sort({ rating: -1 }); // descending rating
+      clothesQuery = clothesQuery.sort({ rating: -1 }); // descending rating
     } else if (req.query.sort === "newest") {
-      outfitsQuery = outfitsQuery.sort({ _id: -1 }); // newest first by _id
+      clothesQuery = clothesQuery.sort({ _id: -1 }); // newest first by _id
     } else {
-      outfitsQuery = outfitsQuery.sort({ _id: -1 });
+      clothesQuery = clothesQuery.sort({ _id: -1 });
     }
 
     // Execute the query
