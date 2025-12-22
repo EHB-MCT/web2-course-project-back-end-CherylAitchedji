@@ -201,13 +201,11 @@ app.put("/outfits/:id", async (req, res) => {
       runValidators: true,
     });
 
-    if (!updatedOutfit) {
+    if (updatedOutfit) {
       res.status(200).json(updatedOutfit);
     } else {
       return res.status(404).json({ message: "Outfit not found" });
     }
-
-    res.status(200).json(updatedOutfit);
   } catch (error) {
     res.status(400).json({ message: "Invalid input", error });
   }
