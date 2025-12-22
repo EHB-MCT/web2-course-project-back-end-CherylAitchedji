@@ -58,7 +58,7 @@ app.get("/clothes", async (req, res) => {
       query.liked = true;
     }
 
-    let clothesQuery = clothing.find(query);
+    let clothesQuery = clothes.find(query);
 
     if (req.query.sort === "highest-rated") {
       clothesQuery = clothesQuery.sort({ rating: -1 }); // descending rating
