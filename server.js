@@ -150,7 +150,10 @@ app.get("/outfits", async (req, res) => {
       query.mainColor = req.query.mainColor;
     }
     console.log("Mongo query object:", query);
-    const outfits = await outfit.find(query).populate("clothes");
+    const outfits = await outfit
+      .find(query)
+      .sort({ _id: -1 })
+      .populate("clothes");
     res.status(200).json(outfits);
   } catch (error) {
     res.status(500).json({ message: "Error fetching outfits", error });
@@ -159,11 +162,9 @@ app.get("/outfits", async (req, res) => {
 
 // Get route outfit
 app.get("/outfits/:id", async (req, res) => {
+  const id = req.params.id;
   try {
-    const outfitItem = await outfit
-      .find()
-      .sort({ _id: -1 })
-      .populate("clothes");
+    const outfitItem = await outfit.findById(id).populate("clothes");
     if (outfitItem) {
       return res.status(200).json(outfitItem);
     } else {
