@@ -37,13 +37,42 @@ module.exports = clothes;
 // Get route clothes
 app.get("/clothes", async (req, res) => {
   try {
-    const allClothes = await clothes.find();
-    res.status(200).json({
-      message: "Clothing items found",
-      data: allClothes,
-    });
+    const query = {};
+
+    if (req.query.clothingType) {
+      query.clothingType = req.query.clothingType;
+    }
+    if (req.query.season) {
+      query.season = req.query.season;
+    }
+
+    if (req.query.occasion) {
+      query.occasion = req.query.occasion;
+    }
+
+    if (req.query.mainColor) {
+      query.mainColor = req.query.mainColor;
+    }
+
+    if (req.query.liked === "true") {
+      query.liked = true;
+    }
+
+    let outfitsQuery = outfit.find(query).populate("clothes");
+
+    if (req.query.sort === "highest-rated") {
+      outfitsQuery = outfitsQuery.sort({ rating: -1 }); // descending rating
+    } else if (req.query.sort === "newest") {
+      outfitsQuery = outfitsQuery.sort({ _id: -1 }); // newest first by _id
+    } else {
+      outfitsQuery = outfitsQuery.sort({ _id: -1 });
+    }
+
+    // Execute the query
+    const clothes = await clothesQuery;
+    res.status(200).json(clothes);
   } catch (error) {
-    res.status(500).json({ message: "No clothing items found", error });
+    res.status(500).json({ message: "Error fetching clothes", error });
   }
 });
 
@@ -161,9 +190,8 @@ app.get("/outfits", async (req, res) => {
       outfitsQuery = outfitsQuery.sort({ _id: -1 });
     }
 
-    // Execute the query:
+    // Execute the query
     const outfits = await outfitsQuery;
-
     res.status(200).json(outfits);
   } catch (error) {
     res.status(500).json({ message: "Error fetching outfits", error });
