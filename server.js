@@ -178,14 +178,15 @@ app.get("/outfits/:id", async (req, res) => {
 // Post route outfit
 app.post("/outfits", async (req, res) => {
   try {
-    const newOutfit = new outfit(req.body); // create a new outfit with posted data
-    const savedOutfit = await newOutfit.save(); // save to DB
-    res.status(201).json({
-      message: "Outfit added successfully",
-      data: savedOutfit,
-    });
+    const newOutfit = new outfit(req.body);
+    const savedOutfit = await newOutfit.save();
+
+    res.status(201).json(savedOutfit);
   } catch (error) {
-    res.status(400).json({ message: "Invalid input", error });
+    res.status(400).json({
+      message: "Invalid input",
+      error,
+    });
   }
 });
 
@@ -194,19 +195,19 @@ app.put("/outfits/:id", async (req, res) => {
   try {
     const outfitId = req.params.id;
     const updateData = req.body;
+
     const updatedOutfit = await outfit.findByIdAndUpdate(outfitId, updateData, {
       new: true,
       runValidators: true,
     });
 
-    if (updatedOutfit) {
-      return res.status(200).json({
-        message: "Outfit updated successfully",
-        data: updatedOutfit,
-      });
+    if (!updatedOutfit) {
+      res.status(200).json(updatedOutfit);
     } else {
       return res.status(404).json({ message: "Outfit not found" });
     }
+
+    res.status(200).json(updatedOutfit);
   } catch (error) {
     res.status(400).json({ message: "Invalid input", error });
   }
