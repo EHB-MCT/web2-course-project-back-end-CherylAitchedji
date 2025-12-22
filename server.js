@@ -39,40 +39,29 @@ app.get("/clothes", async (req, res) => {
   try {
     const query = {};
 
-    if (req.query.clothingType) {
-      query.clothingType = req.query.clothingType;
-    }
-    if (req.query.season) {
-      query.season = req.query.season;
-    }
-
-    if (req.query.occasion) {
-      query.occasion = req.query.occasion;
-    }
-
-    if (req.query.mainColor) {
-      query.mainColor = req.query.mainColor;
-    }
-
-    if (req.query.liked === "true") {
-      query.liked = true;
-    }
+    if (req.query.clothingType) query.clothingType = req.query.clothingType;
+    if (req.query.season) query.season = req.query.season;
+    if (req.query.occasion) query.occasion = req.query.occasion;
+    if (req.query.mainColor) query.mainColor = req.query.mainColor;
+    if (req.query.liked === "true") query.liked = true;
 
     let clothesQuery = clothes.find(query);
 
     if (req.query.sort === "highest-rated") {
-      clothesQuery = clothesQuery.sort({ rating: -1 }); // descending rating
+      clothesQuery = clothesQuery.sort({ rating: -1 });
     } else if (req.query.sort === "newest") {
-      clothesQuery = clothesQuery.sort({ _id: -1 }); // newest first by _id
+      clothesQuery = clothesQuery.sort({ _id: -1 });
     } else {
       clothesQuery = clothesQuery.sort({ _id: -1 });
     }
 
-    // Execute the query
-    const clothes = await clothesQuery;
-    res.status(200).json(clothes);
+    const clothesResult = await clothesQuery;
+    res.status(200).json(clothesResult);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching clothes", error });
+    console.error("Error fetching clothes:", error.stack || error);
+    res
+      .status(500)
+      .json({ message: "Error fetching clothes", error: error.message });
   }
 });
 
