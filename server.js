@@ -21,6 +21,11 @@ mongoose
 /////////////////////////////// API ROUTES /////////////////////////////////////////
 //////////////CLOTHES
 const clothesSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   name: String,
   clothingType: String,
   season: String,
@@ -85,9 +90,19 @@ app.get("/clothes/:id", async (req, res) => {
 // Post route clothing item
 app.post("/clothes", async (req, res) => {
   try {
-    const newClothing = new clothes(req.body);
+    const { userId, ...clothingData } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
+    const newClothing = new clothes({
+      ...clothingData,
+      userId,
+    });
+
     const savedClothing = await newClothing.save();
-    console.log("saved item:", savedClothing);
+
     res.status(201).json({
       message: "Clothing item added successfully",
       data: savedClothing,
@@ -298,8 +313,7 @@ app.post("/login", async (req, res) => {
   //Check if user exist in database
   try {
     const { email, password } = req.body;
-
-    const user = await User.findOne(email);
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
@@ -313,6 +327,7 @@ app.post("/login", async (req, res) => {
       userId: user._id,
     });
   } catch (error) {
+    console.error("Login error:", error);
     return res.status(500).json({ message: "Login failed" });
   }
 });
