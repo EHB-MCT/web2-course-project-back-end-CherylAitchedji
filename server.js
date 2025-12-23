@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const cors = require("cors");
 const bcrypt = require("bcrypt");
-const User = require("./models/User");
 
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173" }));
@@ -265,7 +264,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
 //Register Post route
 app.post("/register", async (req, res) => {
