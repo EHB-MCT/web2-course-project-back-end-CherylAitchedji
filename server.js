@@ -150,6 +150,11 @@ app.delete("/clothes/:id", async (req, res) => {
 ///////////////////////////////////////////////////////////////////////
 //////////////OUTFITS
 const outfitSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   name: String,
   season: String,
   occasion: String,
@@ -218,7 +223,17 @@ app.get("/outfits/:id", async (req, res) => {
 // Post route outfit
 app.post("/outfits", async (req, res) => {
   try {
-    const newOutfit = new outfit(req.body);
+    const userId = req.body.userId;
+
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    const newOutfit = new outfit({
+      ...req.body,
+      userId,
+    });
+
     const savedOutfit = await newOutfit.save();
 
     res.status(201).json(savedOutfit);
