@@ -43,7 +43,12 @@ module.exports = clothes;
 // Get route clothes
 app.get("/clothes", async (req, res) => {
   try {
-    const query = {};
+    const userId = req.query.userId;
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    const query = { userId };
 
     if (req.query.clothingType) query.clothingType = req.query.clothingType;
     if (req.query.season) query.season = req.query.season;
@@ -64,7 +69,6 @@ app.get("/clothes", async (req, res) => {
     const clothesResult = await clothesQuery;
     res.status(200).json(clothesResult);
   } catch (error) {
-    console.error("Error fetching clothes:", error.stack || error);
     res
       .status(500)
       .json({ message: "Error fetching clothes", error: error.message });
@@ -169,35 +173,28 @@ const outfit = mongoose.model("outfits", outfitSchema);
 
 app.get("/outfits", async (req, res) => {
   try {
-    const query = {};
-
-    if (req.query.season) {
-      query.season = req.query.season;
+    const userId = req.query.userId;
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
     }
 
-    if (req.query.occasion) {
-      query.occasion = req.query.occasion;
-    }
+    const query = { userId };
 
-    if (req.query.mainColor) {
-      query.mainColor = req.query.mainColor;
-    }
-
-    if (req.query.liked === "true") {
-      query.liked = true;
-    }
+    if (req.query.season) query.season = req.query.season;
+    if (req.query.occasion) query.occasion = req.query.occasion;
+    if (req.query.mainColor) query.mainColor = req.query.mainColor;
+    if (req.query.liked === "true") query.liked = true;
 
     let outfitsQuery = outfit.find(query).populate("clothes");
 
     if (req.query.sort === "highest-rated") {
-      outfitsQuery = outfitsQuery.sort({ rating: -1 }); // descending rating
+      outfitsQuery = outfitsQuery.sort({ rating: -1 });
     } else if (req.query.sort === "newest") {
-      outfitsQuery = outfitsQuery.sort({ _id: -1 }); // newest first by _id
+      outfitsQuery = outfitsQuery.sort({ _id: -1 });
     } else {
       outfitsQuery = outfitsQuery.sort({ _id: -1 });
     }
 
-    // Execute the query
     const outfits = await outfitsQuery;
     res.status(200).json(outfits);
   } catch (error) {
