@@ -1,14 +1,17 @@
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=22092247)
-# Your project name ✨
-A short description of your project. Aim for 2-3 lines. \
+# Digital Lookbook - BACKEND ✨
+Digital Lookbook is a website where the user can upload their clothes and outfits, displayed in fun way. This is the Backend of the website where the connection with the databse (in MongoDB) and the API routes are made.
+<img width="2559" height="1397" alt="Screenshot 2026-01-02 163756" src="https://github.com/user-attachments/assets/40930ab8-c20c-4607-9c0c-3c1667a1be80" />
+
+
 
 Website url: [website.be](website.be) (optional)
 
-If you want to add more sections, please do so after the existing ones (avoid burying your sources under a lot of text!).
-
 ## Up & running (optional) 🏃‍➡️
-This should contain step by step instructions to run your project (delete this section if it's not relevant). \
-Also include login credentials or other vital information if needed.
+Log in or else you won't be able to see or upload clothes and outfits!
+If you want to see an already populated account with clothes and outfits, this are the credentials:
+- email: adminCher@mail.com
+- password: simplepassword25
 
 ## Sources 🗃️
 List **ALL your used sources** here:
