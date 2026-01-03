@@ -6,7 +6,8 @@ const cors = require("cors");
 const bcrypt = require("bcrypt");
 
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173" }));
+const PORT = process.env.PORT || 3000;
+app.use(cors({ origin: ["http://localhost:5173", "https://ehb-mct.github.io"] }));
 
 // Connection with MongoDb
 mongoose
@@ -63,7 +64,7 @@ app.get("/clothes", async (req, res) => {
     } else if (req.query.sort === "newest") {
       clothesQuery = clothesQuery.sort({ _id: -1 });
     } else {
-      clothesQuery = clothesQuery.sort({ _id: -1 });
+      clothesQuery = clothesQuery.sort({ liked: -1 });
     }
 
     const clothesResult = await clothesQuery;
@@ -192,7 +193,7 @@ app.get("/outfits", async (req, res) => {
     } else if (req.query.sort === "newest") {
       outfitsQuery = outfitsQuery.sort({ _id: -1 });
     } else {
-      outfitsQuery = outfitsQuery.sort({ _id: -1 });
+      outfitsQuery = outfitsQuery.sort({ liked: -1 });
     }
 
     const outfits = await outfitsQuery;
@@ -221,7 +222,6 @@ app.get("/outfits/:id", async (req, res) => {
 app.post("/outfits", async (req, res) => {
   try {
     const userId = req.body.userId;
-
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }
@@ -231,9 +231,9 @@ app.post("/outfits", async (req, res) => {
       userId,
     });
 
-    const savedOutfit = await newOutfit.save();
+    const outfitsResult = await newOutfit.save();
 
-    res.status(201).json(savedOutfit);
+    res.status(201).json(outfitsResult);
   } catch (error) {
     res.status(400).json({
       message: "Invalid input",
@@ -344,8 +344,9 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => res.send("Backend is alive"));
+
 /////////////////////////////// LISTENING PORT /////////////////////////////////////////
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`The server is running in port: ${PORT}`);
 });
