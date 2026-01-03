@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
-app.use(cors({ origin: ["http://localhost:5173", "https://ehb-mct.github.io"] }));
+app.use(cors());
 
 // Connection with MongoDb
 mongoose
@@ -343,8 +343,6 @@ app.post("/login", async (req, res) => {
     return res.status(500).json({ message: "Login failed" });
   }
 });
-
-app.get("/", (req, res) => res.send("Backend is alive"));
 
 /////////////////////////////// LISTENING PORT /////////////////////////////////////////
 app.listen(PORT, () => {
