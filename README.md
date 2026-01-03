@@ -6,6 +6,7 @@ Digital Lookbook is a website where the user can upload their clothes and outfit
 
 
 Website url: https://ehb-mct.github.io/web2-course-project-front-end-CherylAitchedji/login.html
+(Link Backend: https://web2-course-project-back-end-325i.onrender.com)
 
 ## Up & running (optional) 🏃‍➡️
 Log in or else you won't be able to upload clothes and outfits!
