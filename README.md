@@ -15,4 +15,6 @@ If you want to see an already populated account with clothes and outfits, this a
 - password: simplepassword25
 
 ## Sources 🗃️
-[Mongoose package](mongoose package documentation: https://mongoosejs.com/docs/), (Mongoose: https://www.youtube.com/watch?v=30p9QfybWZg) > server.js (line 13-20)
+[Mongoose package and use]( https://www.youtube.com/watch?v=30p9QfybWZg) > server.js (line 13-20)
+[Mongoose documentation] (https://mongoosejs.com/docs/)
+[Javascript documentation] (https://www.w3schools.com/js/default.asp)
